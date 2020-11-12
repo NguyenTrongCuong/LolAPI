@@ -1,27 +1,33 @@
 package main.champion.skin;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Embeddable
 public class Skin {
-	private long skinRPPrice;
-	private long skinLPPrice;
+	@Pattern(regexp="^[0-9]*$")
+	private String skinRPPrice;
+	@Pattern(regexp="^[0-9]*$")
+	private String skinLPPrice;
+	@NotBlank
 	private String skinName;
+	@NotBlank
 	private String skinType;
 	
-	public long getSkinRPPrice() {
+	public String getSkinRPPrice() {
 		return skinRPPrice;
 	}
 	
-	public void setSkinRPPrice(long skinRPPrice) {
+	public void setSkinRPPrice(String skinRPPrice) {
 		this.skinRPPrice = skinRPPrice;
 	}
 	
-	public long getSkinLPPrice() {
+	public String getSkinLPPrice() {
 		return skinLPPrice;
 	}
 	
-	public void setSkinLPPrice(long skinLPPrice) {
+	public void setSkinLPPrice(String skinLPPrice) {
 		this.skinLPPrice = skinLPPrice;
 	}
 	

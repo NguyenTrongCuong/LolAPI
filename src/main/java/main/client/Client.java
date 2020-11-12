@@ -3,6 +3,7 @@ package main.client;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -13,7 +14,7 @@ public class Client {
 	@Id
 	private String username;
 	private String password;
-	@ManyToMany(mappedBy="client")
+	@ManyToMany(mappedBy="client", fetch=FetchType.EAGER)
 	private List<Authority> authorities;
 
 	public List<Authority> getAuthorities() {

@@ -1,9 +1,9 @@
-package main.skill;
+package main.passive;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SkillRepository extends CrudRepository<Skill, Long> {
+public interface PassiveRepository extends CrudRepository<Passive, Long> {
 
 }

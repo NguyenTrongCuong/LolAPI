@@ -1,7 +1,9 @@
 package main.equipment;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.FetchType;
@@ -10,31 +12,52 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.data.domain.Persistable;
 
 import main.champion.Champion;
+import main.passive.Passive;
 
 @Entity
 public class Equipment implements Persistable<Long> {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long equipmentId;
-	private long equipmentPrice;
+	@Pattern(regexp="^[0-9]*$")
+	private String equipmentPrice;
+	@NotBlank
 	private String equipmentName;
+	@NotBlank
 	private String equipmentDescription;
+	@NotBlank
 	private String equipmentPassive;
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="equipmentsofchampion",
 			   joinColumns=@JoinColumn(name="equipmentId"),
 			   inverseJoinColumns=@JoinColumn(name="championId"))
-	private Set<Champion> champion;
+	@Valid
+	private Set<Champion> champion = new HashSet<>();
+	@OneToOne(mappedBy="equipment", cascade=CascadeType.PERSIST)
+	@Valid
+	private Passive passive;
 	@Transient
 	private boolean isNew = true;
 	
+	public Passive getPassive() {
+		return passive;
+	}
+
+	public void setPassive(Passive passive) {
+		this.passive = passive;
+	}
+
 	public Set<Champion> getChampion() {
 		return champion;
 	}
@@ -59,11 +82,11 @@ public class Equipment implements Persistable<Long> {
 		this.equipmentName = equipmentName;
 	}
 	
-	public long getEquipmentPrice() {
+	public String getEquipmentPrice() {
 		return equipmentPrice;
 	}
 	
-	public void setEquipmentPrice(long equipmentPrice) {
+	public void setEquipmentPrice(String equipmentPrice) {
 		this.equipmentPrice = equipmentPrice;
 	}
 	

@@ -1,13 +1,11 @@
-package main.skill;
+package main.passive;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SkillService {
+public class PassiveService {
 	@Autowired
-	private SkillRepository skillRepo;
-	
-	
+	private PassiveRepository passiveRepo;
 
 }

@@ -1,35 +1,45 @@
 package main.skill;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.data.domain.Persistable;
 
 import main.champion.Champion;
+import main.passive.Passive;
 
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Skill implements Persistable<Long> {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long skillId;
-	private long skillCoolDown;
+	@NotBlank
 	private String skillName;
+	@NotBlank
 	private String skillDescription;
-	private String skillType;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@Pattern(regexp="^[0-9]*$")
+	private String skillCoolDown;
+	@NotBlank
+	private String skillActiveButton;
+	@ManyToOne
 	@JoinColumn(name="championId")
+	@Valid
 	private Champion champion;
+	@OneToOne(mappedBy="skill", cascade=CascadeType.PERSIST)
+	@Valid
+	private Passive passive;
 	@Transient
 	private boolean isNew = true;
 	
@@ -39,6 +49,14 @@ public class Skill implements Persistable<Long> {
 
 	public void setChampion(Champion champion) {
 		this.champion = champion;
+	}
+
+	public Passive getPassive() {
+		return passive;
+	}
+
+	public void setPassive(Passive passive) {
+		this.passive = passive;
 	}
 
 	public long getSkillId() {
@@ -57,14 +75,6 @@ public class Skill implements Persistable<Long> {
 		this.skillName = skillName;
 	}
 	
-	public long getSkillCoolDown() {
-		return skillCoolDown;
-	}
-	
-	public void setSkillCoolDown(long skillCoolDown) {
-		this.skillCoolDown = skillCoolDown;
-	}
-	
 	public String getSkillDescription() {
 		return skillDescription;
 	}
@@ -73,12 +83,20 @@ public class Skill implements Persistable<Long> {
 		this.skillDescription = skillDescription;
 	}
 	
-	public String getSkillType() {
-		return skillType;
+	public String getSkillCoolDown() {
+		return skillCoolDown;
 	}
 	
-	public void setSkillType(String skillType) {
-		this.skillType = skillType;
+	public void setSkillCoolDown(String skillCoolDown) {
+		this.skillCoolDown = skillCoolDown;
+	}
+	
+	public String getSkillActiveButton() {
+		return skillActiveButton;
+	}
+	
+	public void setSkillActiveButton(String skillActiveButton) {
+		this.skillActiveButton = skillActiveButton;
 	}
 
 	@Override
@@ -96,6 +114,7 @@ public class Skill implements Persistable<Long> {
 	public void markNotNew() {
 		this.isNew = false;
 	}
+	
 	
 	
 

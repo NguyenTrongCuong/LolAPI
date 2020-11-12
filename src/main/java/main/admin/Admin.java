@@ -3,6 +3,7 @@ package main.admin;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -13,7 +14,7 @@ public class Admin {
 	@Id
 	private String username;
 	private String password;
-	@ManyToMany(mappedBy="admin")
+	@ManyToMany(mappedBy="admin", fetch=FetchType.EAGER)
 	private List<Authority> authorities;
 	
 	public String getUsername() {
