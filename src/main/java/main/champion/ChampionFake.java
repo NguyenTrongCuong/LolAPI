@@ -1,128 +1,76 @@
 package main.champion;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PostLoad;
-import javax.persistence.PrePersist;
-import javax.persistence.Transient;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.persistence.JoinColumn;
-
-import org.springframework.data.domain.Persistable;
+import javax.persistence.JoinTable;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import main.champion.skin.Skin;
 import main.equipment.Equipment;
-import main.passive.Passive;
+import main.equipment.EquipmentFake;
+import main.passive.PassiveFake;
 import main.skill.Skill;
+import main.skill.SkillFake;
 
-@NamedEntityGraph(
-	name="champion-entity-graph",
-	attributeNodes= {
-		@NamedAttributeNode("equipment"),
-		@NamedAttributeNode("skill")
-	}
-)
-@Entity
-public class Champion implements Persistable<Long> {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+public class ChampionFake {
 	private long championId;
-	@Pattern(regexp="^[0-9]*$")
-	private String championRPPrice;
-	@Pattern(regexp="^[0-9]*$")
-	private String championLPPrice;
-	@Pattern(regexp="^[0-9]*$")
-	private String championStartArmor;
-	@Pattern(regexp="^[0-9]*$")
-	private String championStartMagicResist;
-	@Pattern(regexp="^[0-9]*$")
-	private String championStartHealth;
-	@Pattern(regexp="^[0-9]*$")
-	private String championStartResource;
-	@Pattern(regexp="^[0-9]*$")
-	private String championStartPhysicalDamage;
-	@Pattern(regexp="^[0-9]*$")
-	private String championStartMagicalDamage;
-	@Pattern(regexp="^[0-9]*$")
-	private String championStartHitRange;
-	@NotBlank
-	private String championName;
-	@NotBlank
-	private String championType;
-	@NotBlank
-	private String championCategory;
-	@NotBlank
-	private String championHitType;
-	@ElementCollection(fetch=FetchType.EAGER)
-	@JoinTable(name="skinsofchampion",
-			   joinColumns=@JoinColumn(name="championId"))
-	@Valid
+	private String championRPPrice = "empty";
+	private String championLPPrice = "empty";
+	private String championStartArmor = "empty";
+	private String championStartMagicResist = "empty";
+	private String championStartHealth = "empty";
+	private String championStartResource = "empty";
+	private String championStartPhysicalDamage = "empty";
+	private String championStartMagicalDamage = "empty";
+	private String championStartHitRange = "empty";
+	private String championName = "empty";
+	private String championType = "empty";
+	private String championCategory = "empty";
+	private String championHitType = "empty";
 	private Set<Skin> skin;
-	@ManyToMany(mappedBy="champion", fetch=FetchType.LAZY)
-	@Valid
-	private Set<Equipment> equipment = new HashSet<Equipment>();
-	@OneToOne(mappedBy="champion", fetch=FetchType.EAGER, cascade=CascadeType.PERSIST, orphanRemoval=true)
-	@Valid
-	@NotNull
-	private Passive passive;
-	@OneToMany(mappedBy="champion", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, orphanRemoval=true)
-	@Valid
-	@NotEmpty
-	private Set<Skill> skill = new HashSet<>();
-	@Transient
-	private boolean isNew = true;
+	private Set<EquipmentFake> equipment = new HashSet<EquipmentFake>();
+	private Set<SkillFake> skill = new HashSet<SkillFake>();
+	private PassiveFake passive;
 	
-	public Passive getPassive() {
-		return passive;
+	public ChampionFake(Champion champion) {
+		this.championId = champion.getChampionId();
+		this.championLPPrice = champion.getChampionLPPrice();
+		this.championRPPrice = champion.getChampionRPPrice();
+		this.championStartArmor = champion.getChampionStartArmor();
+		this.championStartMagicResist = champion.getChampionStartMagicResist();
+		this.championStartHealth = champion.getChampionStartHealth();
+		this.championStartResource = champion.getChampionStartResource();
+		this.championStartPhysicalDamage = champion.getChampionStartPhysicalDamage();
+		this.championStartMagicalDamage = champion.getChampionStartMagicalDamage();
+		this.championStartHitRange = champion.getChampionStartHitRange();
+		this.championHitType = champion.getChampionHitType();
+		this.championType = champion.getChampionType();
+		this.championName = champion.getChampionName();
+		this.championCategory = champion.getChampionCategory();
+		this.skin = champion.getSkin();
+		this.passive = new PassiveFake(champion.getPassive());
+		List<Equipment> equipment = new ArrayList<Equipment>(champion.getEquipment());
+		if(equipment != null) {
+			for(Equipment ele : equipment) {
+				this.equipment.add(new EquipmentFake(ele));
+			}
+		}
+		List<Skill> skill = new ArrayList<Skill>(champion.getSkill());
+		if(skill != null) {
+			for(Skill ele : skill) {
+				this.skill.add(new SkillFake(ele));
+			}
+		}
 	}
-
-	public void setPassive(Passive passive) {
-		this.passive = passive;
-	}
-
-	public Set<Skill> getSkill() {
-		return skill;
-	}
-
-	public void setSkill(Set<Skill> skill) {
-		this.skill = skill;
-	}
-
-	public Set<Skin> getSkin() {
-		return skin;
-	}
-
-	public void setSkin(Set<Skin> skin) {
-		this.skin = skin;
-	}
-
-	public Set<Equipment> getEquipment() {
-		return equipment;
-	}
-
-	public void setEquipment(Set<Equipment> equipment) {
-		this.equipment = equipment;
-	}
-
+	
 	public long getChampionId() {
 		return championId;
 	}
@@ -234,23 +182,40 @@ public class Champion implements Persistable<Long> {
 	public void setChampionHitType(String championHitType) {
 		this.championHitType = championHitType;
 	}
+	
+	public Set<Skin> getSkin() {
+		return skin;
+	}
+	
+	public void setSkin(Set<Skin> skin) {
+		this.skin = skin;
+	}
+	
+	public Set<EquipmentFake> getEquipment() {
+		return equipment;
+	}
+	
+	public void setEquipmentFake(Set<EquipmentFake> equipmentFake) {
+		this.equipment = equipmentFake;
+	}
+	
+	public Set<SkillFake> getSkill() {
+		return skill;
+	}
+	
+	public void setSkillFake(Set<SkillFake> skillFake) {
+		this.skill = skillFake;
+	}
+	
+	public PassiveFake getPassive() {
+		return passive;
+	}
+	
+	public void setPassiveFake(PassiveFake passiveFake) {
+		this.passive = passiveFake;
+	}
+	
+	
+	
 
-	@Override
-	public Long getId() {
-		return this.championId;
-	}
-
-	@Override
-	public boolean isNew() {
-		return this.isNew;
-	}
-	
-	@PrePersist
-	@PostLoad
-	public void markNotNew() {
-		this.isNew = false;
-	}
-	
-	
-	
 }

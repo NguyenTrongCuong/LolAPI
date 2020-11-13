@@ -40,6 +40,14 @@ public class EquipmentService {
 		this.equipmentRepo.save(equipment);
 	}
 	
+	public Equipment getEquipmentById(long equipmentId) throws Exception {
+		Optional<Equipment> equipment = this.equipmentRepo.findById(equipmentId);
+		if(!equipment.isEmpty()) {
+			return equipment.get();
+		}
+		else throw new Exception("Equipment not found");
+	}
+	
 	public List<Equipment> findEquipmentsWithChampion(List<Long> equipmentId) {
 		Optional<List<Equipment>> rs = this.equipmentRepo.findByEquipmentIdIn(equipmentId);
 		return rs.isEmpty() ? null : rs.get();
@@ -83,13 +91,8 @@ public class EquipmentService {
 		if(!equipment.isEmpty()) {
 			Equipment rs = equipment.get();
 			if(equipment2DTO.getPassive() != null) {
-				Passive passive = new Passive();
-				passive.setPassiveCoolDown(equipment2DTO.getPassive().getPassiveCoolDown());
-				passive.setPassiveDescription(equipment2DTO.getPassive().getPassiveDescription());
-				passive.setPassiveName(equipment2DTO.getPassive().getPassiveName());
-				passive.setEquipment(rs);
-				this.passiveService.savePassive(passive);
-				rs.setPassive(passive);
+				rs.setPassive(null);
+				equipment2DTO.getPassive().setEquipment(rs);
 			}
 			if(equipment2DTO.getEquipmentName() != null && !equipment2DTO.getEquipmentName().equals("")) {
 				rs.setEquipmentName(equipment2DTO.getEquipmentName());
@@ -104,6 +107,40 @@ public class EquipmentService {
 				rs.setEquipmentPrice(equipment2DTO.getEquipmentPrice());
 			}
 			this.updateEquipment(rs);
+			if(equipment2DTO.getPassive() != null) {
+				this.passiveService.savePassive(equipment2DTO.getPassive());
+			}
+		}
+		else throw new Exception("Equipment not found");
+	}
+	
+	public void deleteEquipment(long equipmentId) throws Exception {
+		Optional<Equipment> equipment = this.equipmentRepo.findByEquipmentId(equipmentId);
+		if(!equipment.isEmpty()) {
+			List<Champion> champion = new ArrayList<Champion>(equipment.get().getChampion());
+			for(Champion ele : champion) {
+				ele.getEquipment().remove(equipment.get());
+			}
+			this.championService.updateChampions(champion);
+			this.equipmentRepo.delete(equipment.get());
+		}
+		else throw new Exception("Equipment not found");
+	}
+	
+	public void deletePassiveOfEquipment(long equipmentId) throws Exception {
+		Optional<Equipment> equipment = this.equipmentRepo.findById(equipmentId);
+		if(!equipment.isEmpty()) {
+			equipment.get().setPassive(null);
+			this.updateEquipment(equipment.get());
+		}
+		else throw new Exception("Equipment not found");
+	}
+	
+	public Equipment getEquipmentByIdEagerly(long equipmentId) throws Exception {
+		System.out.println(123445);
+		Equipment equipment = this.equipmentRepo.searchEquipmentById(equipmentId);
+		if(equipment != null) {
+			return equipment;
 		}
 		else throw new Exception("Equipment not found");
 	}

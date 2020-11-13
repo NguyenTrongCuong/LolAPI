@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,7 +65,7 @@ public class AdminController {
 			this.championService.updateEquipmentsOfChamion(championDTO);
 		}
 		catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Champion not found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	
@@ -76,7 +78,7 @@ public class AdminController {
 			this.equipmentService.updateChampionsOfEquipment(equipmentDTO);
 		} 
 		catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment not found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	
@@ -89,7 +91,7 @@ public class AdminController {
 			this.equipmentService.updateInfoOfEquipment(equipment2DTO);
 		}
 		catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment not found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	
@@ -102,7 +104,7 @@ public class AdminController {
 			this.skillService.updateInfoOfSkill(skillDTO);
 		}
 		catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	
@@ -115,7 +117,7 @@ public class AdminController {
 			this.championService.updateInfoOfChampion(champion2DTO);
 		}
 		catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Champion not found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	
@@ -128,11 +130,49 @@ public class AdminController {
 			this.passiveService.updateInfoOfPassive(passiveDTO);
 		}
 		catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Passive not found");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	
+	@DeleteMapping("/api/v1/admin/deleteChampion/{championId}")
+	public void deleteChampion(@PathVariable("championId") long championId) {
+		try {
+			this.championService.deleteChampion(championId);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
 	
+	@DeleteMapping("/api/v1/admin/deleteEquipment/{equipmentId}")
+	public void deleteEquipment(@PathVariable("equipmentId") long equipmentId) {
+		try {
+			this.equipmentService.deleteEquipment(equipmentId);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
+	
+	@DeleteMapping("/api/v1/admin/deletePassiveOfSkill/{skillId}")
+	public void deletePassiveOfSkill(@PathVariable("skillId") long skillId) {
+		try {
+			this.skillService.deletePassiveOfSkill(skillId);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
+	
+	@DeleteMapping("/api/v1/admin/deletePassiveOfEquipment/{equipmentId}")
+	public void deletePassiveOfEquipment(@PathVariable("equipmentId") long equipmentId) {
+		try {
+			this.equipmentService.deletePassiveOfEquipment(equipmentId);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
 	
 
 }

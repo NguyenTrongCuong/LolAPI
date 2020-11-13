@@ -43,6 +43,14 @@ public class ChampionService {
 		this.championRepo.saveAll(champion);
 	}
 	
+	public Champion getChampionById(long championId) throws Exception {
+		Champion champion = this.championRepo.getChampionByIdEagerly(championId);
+		if(champion != null) {
+			return champion;
+		}
+		else throw new Exception("Champion not found");
+	}
+	
 	public Champion getChampionWithEquipments(long championId) {
 		Optional<Champion> rs = this.championRepo.findByChampionId(championId);
 		return rs.isEmpty() ? null : rs.get();
@@ -132,7 +140,18 @@ public class ChampionService {
 		else throw new Exception("Champion not found");
 	}
 	
-	
+	public void deleteChampion(long championId) throws Exception {
+		Optional<Champion> champion = this.championRepo.findByChampionId(championId);
+		if(!champion.isEmpty()) {
+			List<Equipment> equipment = new ArrayList<Equipment>(champion.get().getEquipment());
+			for(Equipment ele : equipment) {
+				ele.getChampion().remove(champion.get());
+			}
+			this.equipmentService.updateEquipments(equipment);
+			this.championRepo.delete(champion.get());
+		}
+		else throw new Exception("Champion not found");
+	}
 	
 	
 	

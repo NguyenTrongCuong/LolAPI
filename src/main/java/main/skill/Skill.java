@@ -2,6 +2,7 @@ package main.skill;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,11 +34,11 @@ public class Skill implements Persistable<Long> {
 	private String skillCoolDown;
 	@NotBlank
 	private String skillActiveButton;
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="championId")
 	@Valid
 	private Champion champion;
-	@OneToOne(mappedBy="skill", cascade=CascadeType.PERSIST, orphanRemoval=true)
+	@OneToOne(mappedBy="skill", fetch=FetchType.EAGER, cascade=CascadeType.PERSIST, orphanRemoval=true)
 	@Valid
 	private Passive passive;
 	@Transient

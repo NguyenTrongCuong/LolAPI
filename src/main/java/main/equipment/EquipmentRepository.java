@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EquipmentRepository extends CrudRepository<Equipment, Long> {
+public interface EquipmentRepository extends CrudRepository<Equipment, Long>, CustomEquipmentRepository {
 	@EntityGraph(attributePaths={"champion"})
 	public Optional<List<Equipment>> findByEquipmentIdIn(List<Long> equipmentId);
 	

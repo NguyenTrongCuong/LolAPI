@@ -12,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -25,6 +28,21 @@ import org.springframework.data.domain.Persistable;
 import main.champion.Champion;
 import main.passive.Passive;
 
+@NamedEntityGraph(
+	name="equipment-entity-graph",
+	attributeNodes={
+		@NamedAttributeNode(value="champion", subgraph="sub-graph1")
+	},
+	subgraphs= {
+		@NamedSubgraph(
+			name="sub-graph1",
+			attributeNodes={
+				@NamedAttributeNode("equipment"),
+				@NamedAttributeNode("skill")
+			}
+		)
+	}
+)
 @Entity
 public class Equipment implements Persistable<Long> {
 	@Id
@@ -44,7 +62,7 @@ public class Equipment implements Persistable<Long> {
 			   inverseJoinColumns=@JoinColumn(name="championId"))
 	@Valid
 	private Set<Champion> champion = new HashSet<>();
-	@OneToOne(mappedBy="equipment", cascade=CascadeType.PERSIST, orphanRemoval=true)
+	@OneToOne(mappedBy="equipment", fetch=FetchType.EAGER, cascade=CascadeType.PERSIST, orphanRemoval=true)
 	@Valid
 	private Passive passive;
 	@Transient

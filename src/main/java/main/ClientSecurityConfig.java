@@ -71,6 +71,7 @@ public class ClientSecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilterBefore(getClientLoginFilter(), ClientCustomAuthenticationFilter.class)
 			.authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/v1/client/login").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/v1/client/**").hasRole("USER")
 				.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}

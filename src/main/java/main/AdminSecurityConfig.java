@@ -76,6 +76,10 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 											 "/api/v1/admin/updateInfoOfSkill",
 											 "/api/v1/admin/updateInfoOfChampion",
 											 "/api/v1/admin/updateInfoOfPassive").hasRole("ADMIN")
+				.antMatchers(HttpMethod.DELETE, "/api/v1/admin/deleteChampion",
+												"/api/v1/admin/deleteEquipment",
+												"/api/v1/admin/deletePassiveOfSkill",
+												"/api/v1/admin/deletePassiveOfEquipment").hasRole("ADMIN")
 				.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
