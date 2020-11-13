@@ -37,7 +37,7 @@ public class Skill implements Persistable<Long> {
 	@JoinColumn(name="championId")
 	@Valid
 	private Champion champion;
-	@OneToOne(mappedBy="skill", cascade=CascadeType.PERSIST)
+	@OneToOne(mappedBy="skill", cascade=CascadeType.PERSIST, orphanRemoval=true)
 	@Valid
 	private Passive passive;
 	@Transient

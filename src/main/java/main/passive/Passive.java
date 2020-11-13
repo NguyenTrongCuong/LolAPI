@@ -116,7 +116,7 @@ public class Passive implements Persistable<Long> {
 	public void markNotNew() {
 		this.isNew = false;
 	}
-	
+
 	
 
 }

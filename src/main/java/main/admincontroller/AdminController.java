@@ -1,20 +1,31 @@
 package main.admincontroller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import main.champion.Champion;
+import main.champion.Champion2DTO;
 import main.champion.ChampionDTO;
 import main.champion.ChampionService;
 import main.equipment.Equipment;
+import main.equipment.Equipment2DTO;
+import main.equipment.EquipmentDTO;
 import main.equipment.EquipmentService;
+import main.passive.PassiveDTO;
+import main.passive.PassiveService;
+import main.skill.SkillDTO;
+import main.skill.SkillService;
 
 @RestController
 public class AdminController {
@@ -22,8 +33,10 @@ public class AdminController {
 	private ChampionService championService;
 	@Autowired
 	private EquipmentService equipmentService;
-	
-	
+	@Autowired
+	private SkillService skillService;
+	@Autowired
+	private PassiveService passiveService;
 	
 	@PostMapping("/api/v1/admin/addChampion")
 	public void addChampion(@RequestBody @Valid Champion champion, BindingResult result) {
@@ -41,13 +54,83 @@ public class AdminController {
 		this.equipmentService.saveEquipment(equipment);
 	}
 	
-	public void updateEquipmentsOfChampion(@Valid ChampionDTO championDTO, BindingResult result) {
+	@PutMapping("/api/v1/admin/updateEquipmentsOfChampion")
+	public void updateEquipmentsOfChampion(@RequestBody @Valid ChampionDTO championDTO, BindingResult result) {
 		if(result.hasErrors()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid info");
 		}
-		
+		try {
+			this.championService.updateEquipmentsOfChamion(championDTO);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Champion not found");
+		}
 	}
 	
+	@PutMapping("/api/v1/admin/updateChampionsOfEquipment")
+	public void updateChampionsOfEquipment(@RequestBody @Valid EquipmentDTO equipmentDTO, BindingResult result) {
+		if(result.hasErrors()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid info");
+		}
+		try {
+			this.equipmentService.updateChampionsOfEquipment(equipmentDTO);
+		} 
+		catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment not found");
+		}
+	}
+	
+	@PutMapping("/api/v1/admin/updateInfoOfEquipment")
+	public void updateInfoOfEquipment(@RequestBody @Valid Equipment2DTO equipment2DTO, BindingResult result) {
+		if(result.hasErrors()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid info");
+		}
+		try {
+			this.equipmentService.updateInfoOfEquipment(equipment2DTO);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment not found");
+		}
+	}
+	
+	@PutMapping("/api/v1/admin/updateInfoOfSkill")
+	public void updateInfoOfSkill(@RequestBody @Valid SkillDTO skillDTO, BindingResult result) {
+		if(result.hasErrors()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid info");
+		}
+		try {
+			this.skillService.updateInfoOfSkill(skillDTO);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found");
+		}
+	}
+	
+	@PutMapping("/api/v1/admin/updateInfoOfChampion")
+	public void updateInfoOfChampion(@RequestBody @Valid Champion2DTO champion2DTO, BindingResult result) {
+		if(result.hasErrors()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid info");
+		}
+		try {
+			this.championService.updateInfoOfChampion(champion2DTO);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Champion not found");
+		}
+	}
+	
+	@PutMapping("/api/v1/admin/updateInfoOfPassive")
+	public void updateInfoOfPassive(@RequestBody @Valid PassiveDTO passiveDTO, BindingResult result) {
+		if(result.hasErrors()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid info");
+		}
+		try {
+			this.passiveService.updateInfoOfPassive(passiveDTO);
+		}
+		catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Passive not found");
+		}
+	}
 	
 	
 	

@@ -69,7 +69,13 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilterBefore(getAdminLoginFilter(), AdminCustomAuthenticationFilter.class)
 			.authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/v1/admin/login").permitAll()
-				.antMatchers(HttpMethod.POST, "/api/v1/admin/addChampion").hasRole("ADMIN")
+				.antMatchers(HttpMethod.POST, "/api/v1/admin/addChampion", "/api/v1/admin/addEquipment").hasRole("ADMIN")
+				.antMatchers(HttpMethod.PUT, "/api/v1/admin/updateInfoOfEquipment",
+											 "/api/v1/admin/updateEquipmentsOfChampion",
+											 "/api/v1/admin/updateChampionsOfEquipment",
+											 "/api/v1/admin/updateInfoOfSkill",
+											 "/api/v1/admin/updateInfoOfChampion",
+											 "/api/v1/admin/updateInfoOfPassive").hasRole("ADMIN")
 				.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		

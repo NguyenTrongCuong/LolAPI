@@ -44,7 +44,7 @@ public class Equipment implements Persistable<Long> {
 			   inverseJoinColumns=@JoinColumn(name="championId"))
 	@Valid
 	private Set<Champion> champion = new HashSet<>();
-	@OneToOne(mappedBy="equipment", cascade=CascadeType.PERSIST)
+	@OneToOne(mappedBy="equipment", cascade=CascadeType.PERSIST, orphanRemoval=true)
 	@Valid
 	private Passive passive;
 	@Transient
@@ -120,6 +120,28 @@ public class Equipment implements Persistable<Long> {
 	@PostLoad
 	public void markNotNew() {
 		this.isNew = false;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (equipmentId ^ (equipmentId >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Equipment other = (Equipment) obj;
+		if (equipmentId != other.equipmentId)
+			return false;
+		return true;
 	}
 	
 	
