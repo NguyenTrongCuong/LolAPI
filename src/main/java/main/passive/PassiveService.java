@@ -35,5 +35,62 @@ public class PassiveService {
 		}
 		else throw new Exception("Passive not found");
 	}
+	
+	public Passive getPassiveByIdEagerly(long passiveId) throws Exception {
+		Passive passive = this.passiveRepo.getPassiveByIdEagerly(passiveId);
+		if(passive != null) {
+			return passive;
+		}
+		else throw new Exception("Passive not found");
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

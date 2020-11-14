@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -19,6 +22,61 @@ import main.champion.Champion;
 import main.equipment.Equipment;
 import main.skill.Skill;
 
+@NamedEntityGraph(
+	name="passive-entity-graph",
+	attributeNodes={
+		@NamedAttributeNode(value="champion", subgraph="subgraph-7"),
+		@NamedAttributeNode(value="skill", subgraph="subgraph-8"),
+		@NamedAttributeNode(value="equipment", subgraph="subgraph-9")
+	},
+	subgraphs={
+		@NamedSubgraph(
+			name="subgraph-7",
+			attributeNodes={
+				@NamedAttributeNode(value="skill", subgraph="subgraph-12"),
+				@NamedAttributeNode(value="equipment", subgraph="subgraph-13")
+			}
+		),
+		@NamedSubgraph(
+			name="subgraph-8",
+			attributeNodes={
+				@NamedAttributeNode(value="champion", subgraph="subgraph-10")
+			}
+		),
+		@NamedSubgraph(
+			name="subgraph-9",
+			attributeNodes={
+				@NamedAttributeNode(value="champion", subgraph="subgraph-11")
+			}
+		),
+		@NamedSubgraph(
+			name="subgraph-10",
+			attributeNodes={
+				@NamedAttributeNode("skill"),
+				@NamedAttributeNode("equipment")
+			}
+		),
+		@NamedSubgraph(
+			name="subgraph-11",
+			attributeNodes={
+				@NamedAttributeNode("skill"),
+				@NamedAttributeNode("equipment")
+			}
+		),
+		@NamedSubgraph(
+			name="subgraph-12",
+			attributeNodes={
+				@NamedAttributeNode(value="champion")
+			}
+		),
+		@NamedSubgraph(
+			name="subgraph-13",
+			attributeNodes={
+				@NamedAttributeNode(value="champion")
+			}
+		)
+	}
+)
 @Entity
 public class Passive implements Persistable<Long> {
 	@Id

@@ -71,6 +71,37 @@ public class ChampionFake {
 		}
 	}
 	
+	public ChampionFake(Champion champion, int order) {
+		this.championId = champion.getChampionId();
+		this.championLPPrice = champion.getChampionLPPrice();
+		this.championRPPrice = champion.getChampionRPPrice();
+		this.championStartArmor = champion.getChampionStartArmor();
+		this.championStartMagicResist = champion.getChampionStartMagicResist();
+		this.championStartHealth = champion.getChampionStartHealth();
+		this.championStartResource = champion.getChampionStartResource();
+		this.championStartPhysicalDamage = champion.getChampionStartPhysicalDamage();
+		this.championStartMagicalDamage = champion.getChampionStartMagicalDamage();
+		this.championStartHitRange = champion.getChampionStartHitRange();
+		this.championHitType = champion.getChampionHitType();
+		this.championType = champion.getChampionType();
+		this.championName = champion.getChampionName();
+		this.championCategory = champion.getChampionCategory();
+		this.skin = champion.getSkin();
+		this.passive = new PassiveFake(champion.getPassive());
+		List<Equipment> equipment = new ArrayList<Equipment>(champion.getEquipment());
+		if(equipment != null) {
+			for(Equipment ele : equipment) {
+				this.equipment.add(new EquipmentFake(ele, 2));
+			}
+		}
+		List<Skill> skill = new ArrayList<Skill>(champion.getSkill());
+		if(skill != null) {
+			for(Skill ele : skill) {
+				this.skill.add(new SkillFake(ele, 3));
+			}
+		}
+	}
+	
 	public long getChampionId() {
 		return championId;
 	}

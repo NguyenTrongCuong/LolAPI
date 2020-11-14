@@ -1,6 +1,7 @@
 package main.skill;
 
 
+import main.champion.ChampionFake;
 import main.passive.Passive;
 import main.passive.PassiveFake;
 
@@ -11,6 +12,7 @@ public class SkillFake {
 	private String skillCoolDown = "empty";
 	private String skillActiveButton = "empty";
 	private PassiveFake passive;
+	private ChampionFake champion;
 	
 	public SkillFake(Skill skill) {
 		this.skillId = skill.getSkillId();
@@ -23,6 +25,28 @@ public class SkillFake {
 		}
 	}
 	
+	public SkillFake(Skill skill, int order) {
+		this.skillId = skill.getSkillId();
+		this.skillName = skill.getSkillName();
+		this.skillDescription = skill.getSkillDescription();
+		this.skillCoolDown = skill.getSkillCoolDown();
+		this.skillActiveButton = skill.getSkillActiveButton();
+		if(skill.getPassive() != null) {
+			this.passive = new PassiveFake(skill.getPassive());
+		}
+		if(skill.getChampion() != null) {
+			this.champion = new ChampionFake(skill.getChampion());
+		}
+	}
+	
+	public ChampionFake getChampion() {
+		return champion;
+	}
+
+	public void setChampion(ChampionFake champion) {
+		this.champion = champion;
+	}
+
 	public long getSkillId() {
 		return skillId;
 	}

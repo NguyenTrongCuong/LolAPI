@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -21,6 +24,21 @@ import org.springframework.data.domain.Persistable;
 import main.champion.Champion;
 import main.passive.Passive;
 
+@NamedEntityGraph(
+	name="skill-entity-graph",
+	attributeNodes={
+		@NamedAttributeNode(value="champion", subgraph="sub-graph-2")
+	},
+	subgraphs={
+		@NamedSubgraph(
+			name="sub-graph-2",
+			attributeNodes={
+				@NamedAttributeNode("skill"),
+				@NamedAttributeNode("equipment")
+			}
+		)
+	}
+)
 @Entity
 public class Skill implements Persistable<Long> {
 	@Id

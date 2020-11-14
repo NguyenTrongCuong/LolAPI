@@ -57,6 +57,14 @@ public class SkillService {
 		else throw new Exception("Skill not found");
 	}
 	
+	public Skill getSkillByIdEagerly(long skillId) throws Exception {
+		Skill skill = this.skillRepo.getSkillByIdEagerly(skillId);
+		if(skill != null) {
+			return skill;
+		}
+		else throw new Exception("Skill not found");
+	}
+	
 	
 	
 	
